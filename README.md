@@ -1,6 +1,6 @@
 # Trove
 
-**TODO: Add description**
+A Composable Search Library for [Ecto](https://hexdocs.pm/ecto).
 
 ## Installation
 
