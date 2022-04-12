@@ -23,4 +23,6 @@ be found at [https://hexdocs.pm/trove](https://hexdocs.pm/trove).
 
 Run `docker-compose up -d` to start the database.
 
+Run `mix ecto.migrate` to apply the migrations to the database.
+
 Run `mix test` to run tests.

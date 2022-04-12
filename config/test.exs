@@ -7,3 +7,7 @@ config :trove, TroveTest.Repo,
   hostname: "localhost",
   port: 5600,
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :logger,
+  backends: [:console],
+  compile_time_purge_level: :debug

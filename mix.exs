@@ -37,7 +37,7 @@ defmodule Trove.MixProject do
 
   defp aliases do
     [
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.drop", "ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end

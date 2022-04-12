@@ -7,38 +7,38 @@ defmodule TroveTest do
     Vehicle
   }
 
-  test "Person has correct fields" do
-    assert Trove.search(Person) == [:id, :first_name, :last_name, :age]
-  end
+  # test "Person has correct fields" do
+  #   assert Trove.search(Person) == [:id, :first_name, :last_name, :age]
+  # end
 
-  test "Vehicle has correct fields" do
-    assert Trove.search(Vehicle) == [
-             :id,
-             :person_id,
-             :make,
-             :model,
-             :year,
-             :color,
-             :license_plate,
-             :date_registered
-           ]
-  end
+  # test "Vehicle has correct fields" do
+  #   assert Trove.search(Vehicle) == [
+  #            :id,
+  #            :person_id,
+  #            :make,
+  #            :model,
+  #            :year,
+  #            :color,
+  #            :license_plate,
+  #            :date_registered
+  #          ]
+  # end
 
-  test "Person query" do
-    res1 =
-      Person
-      |> Trove.get()
-      |> Repo.all()
+  # test "Person query" do
+  #   res1 =
+  #     Person
+  #     |> Trove.get()
+  #     |> Repo.all()
 
-    assert res1 == []
+  #   assert res1 == []
 
-    Repo.insert(%Person{first_name: "Tad", last_name: "Scritchfield", age: 26})
+  #   Repo.insert(%Person{first_name: "Tad", last_name: "Scritchfield", age: 26})
 
-    res2 =
-      Person
-      |> Trove.get()
-      |> Repo.all()
+  #   res2 =
+  #     Person
+  #     |> Trove.get()
+  #     |> Repo.all()
 
-    assert [new_person] = res2
-  end
+  #   assert [new_person] = res2
+  # end
 end
