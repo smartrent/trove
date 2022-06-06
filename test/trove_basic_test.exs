@@ -31,4 +31,16 @@ defmodule TroveBasicTest do
     [r1] = result
     assert r1.message == "Find me"
   end
+
+  test "Log query - incorrect filter" do
+    Repo.insert(%Log{message: "incorrect filter"})
+    Repo.insert(%Log{message: "this is a mistake"})
+
+    result =
+      Log
+      |> Trove.search(%{other_field: "Find me"})
+      |> Repo.all()
+
+    assert Enum.count(result) == 2
+  end
 end

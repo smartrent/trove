@@ -10,4 +10,4 @@ config :trove, TroveTest.Repo,
 
 config :logger,
   backends: [:console],
-  compile_time_purge_level: :debug
+  compile_time_purge_matching: [[lower_than: :debug]]
