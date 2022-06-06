@@ -9,7 +9,7 @@ defmodule Fixtures.Vehicle do
     field(:make, :string)
     field(:model, :string)
     field(:year, :integer)
-    field(:color, :integer)
+    field(:color, :string)
     field(:license_plate, :string)
     field(:date_registered, :utc_datetime)
   end
