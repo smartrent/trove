@@ -26,3 +26,11 @@ Run `docker-compose up -d` to start the database.
 Run `mix ecto.migrate` to apply the migrations to the database.
 
 Run `mix test` to run tests.
+
+## Features
+
+- [x] Search by fields on schema
+- [ ] Search by relations fields
+- [ ] Add custom filters to search
+- [ ] Paginated results
+- [ ] Add docs

@@ -7,6 +7,7 @@ defmodule Trove do
 
   import Ecto.Query
 
+  alias Inflex
   alias Trove.Filter
 
   # @spec _has_defined_schema?(any()) :: boolean
@@ -14,15 +15,15 @@ defmodule Trove do
   #   function_exported?(module, :__schema__, 1) or function_exported?(module, :__schema__, 2)
   # end
 
-  # %{ field_of_module: value, relation: %{ field_of_relation: value } }
+  # %{ field_of_module: value, relation: %{ field_of_relation: value }, relation_field_of_relation: value }
 
   @spec search(any(), list(), list(atom())) :: Query.t()
   def search(module, filters \\ %{}, preloads \\ []) do
     filter_list =
       module
-      # Get module's fields
-      |> get_fields()
-      |> IO.inspect(label: 'fields', limit: :infinity)
+      # Get all of the module's possible filters
+      |> get_available_filters()
+      |> IO.inspect(label: 'available_filters', limit: :infinity)
       # Validate and clean arg filters - remove any filter that does not match the module list (and type?)
       |> validate_filters(filters)
       # Transform filters to key value list
@@ -80,8 +81,15 @@ defmodule Trove do
     |> Enum.map(&{&1, get_field_type(module, &1)})
   end
 
-  def get_relations(module) do
-    module.__schema__(:associations)
+  # Get a key value list of associations
+  # [{:association_key, :related_module}]
+  def get_associations(module) do
+    :associations
+    |> module.__schema__()
+    |> Enum.map(fn a ->
+      am = module.__schema__(:association, a)
+      {a, am.related}
+    end)
   end
 
   def build_filter_map(module) do
@@ -90,7 +98,30 @@ defmodule Trove do
     |> Enum.map(&Filter.from_tuple/1)
   end
 
+  # Creates a list of atoms concatenated with the associated key
+  # Also adds the regular nested list of fields under the associated key
+  # ie [:vehicle_id, :vehicle_make, vehicle: [:id, :make]]
+  def build_alternative_association_filters({association_key, module}) do
+    fields = get_fields(module)
+    singular_association_key = get_singular_atom(association_key)
+
+    fields
+    |> Enum.map(&concat_atoms(singular_association_key, &1))
+    |> Kernel.++([{singular_association_key, fields}])
+  end
+
+  def get_available_filters(module) do
+    fields = get_fields(module)
+
+    module
+    |> get_associations()
+    |> Enum.map(&build_alternative_association_filters/1)
+    |> Kernel.++(fields)
+    |> List.flatten()
+  end
+
   def validate_filters(fields, filters) do
+    # need to normalize filters first
     %{valid: valid, invalid: invalid} =
       Enum.reduce(filters, %{valid: %{}, invalid: %{}}, fn {key, value}, acc ->
         case Enum.member?(fields, key) do
@@ -132,4 +163,33 @@ defmodule Trove do
       end
     end)
   end
+
+  # is it unsafe to take an existing atom and create a modified new one?
+  @spec concat_atoms(atom(), atom()) :: atom()
+  def concat_atoms(a1, a2) do
+    String.to_atom(to_string(a1) <> "_" <> to_string(a2))
+  end
+
+  @spec get_singular_atom(atom()) :: atom()
+  def get_singular_atom(a),
+    do:
+      a
+      |> to_string()
+      |> Inflex.singularize()
+      |> String.to_atom()
+
+  @spec get_plural_atom(atom()) :: atom()
+  def get_plural_atom(a),
+    do:
+      a
+      |> to_string()
+      |> Inflex.pluralize()
+      |> String.to_atom()
+
+  # @spec build_associated_field_name(atom(), atom()) :: atom()
+  # def build_associated_field_name(association_key, field_name),
+  #   do:
+  #     association_key
+  #     |> get_singular_atom()
+  #     |> concat_atoms(field_name)
 end

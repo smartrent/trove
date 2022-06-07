@@ -25,6 +25,7 @@ defmodule Trove.MixProject do
       {:ecto, "~> 3.7.1"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      {:inflex, "~> 2.1"},
       {:ex_doc, "~> 0.28.2", only: :dev},
       {:earmark, "~> 1.4.19", only: :dev},
       {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false}
