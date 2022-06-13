@@ -31,6 +31,15 @@ Run `mix test` to run tests.
 
 - [x] Search by fields on schema
 - [ ] Search by relations fields
+  - [ ] Search one relation level deep
+  - [ ] Search infinite levels deep
 - [ ] Add custom filters to search
 - [ ] Paginated results
-- [ ] Add docs
+- [ ] Docs
+- [ ] Schema information caching (ie Cache available_filters per module/schema)
+
+## Reference
+
+https://yos.io/2016/04/28/writing-and-publishing-elixir-libraries/
+https://hexdocs.pm/ecto/Ecto.Schema.html#module-reflection
+https://hexdocs.pm/ecto_shorts/EctoShorts.html
