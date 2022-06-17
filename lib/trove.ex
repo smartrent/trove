@@ -11,38 +11,23 @@ defmodule Trove do
   alias Trove.Filter
   alias Trove.Helper
 
-  # @spec _has_defined_schema?(any()) :: boolean
-  # defp _has_defined_schema?(module) do
-  #   function_exported?(module, :__schema__, 1) or function_exported?(module, :__schema__, 2)
-  # end
-
-  # %{ field_of_module: value, relation: %{ field_of_relation: value }, relation_field_of_relation: value }
-
   @spec search(any(), list(), list(atom())) :: Query.t()
-  def search(module, filters \\ %{}, preloads \\ []) do
+  def search(module, filters \\ %{}, _preloads \\ []) do
     filter_list =
       module
       # Get all of the module's possible filters
       |> get_available_filters()
-      |> IO.inspect(label: 'available_filters', limit: :infinity)
       # Validate and clean arg filters - remove any filter that does not match the module list (and type?)
       |> validate_filters(filters)
+      # Normalize filters to have consistent shape
       |> normalize_filters(module)
       # Transform filters to key value list
       # ie: [id: 1, message: "hello"]
       |> map_to_kv_list()
-      |> IO.inspect(label: 'filter_list', limit: :infinity)
 
     module
     |> create_base_query()
     |> apply_filters(module, filter_list)
-  end
-
-  # def add_custom_filter(key, function) do
-  # end
-
-  def get(module) do
-    module
   end
 
   def apply_filters(query, []), do: query
@@ -62,24 +47,11 @@ defmodule Trove do
     Enum.map(relations_list, &apply_relations_filter(query, module, &1))
   end
 
-  def apply_relations_filter(query, module, {relation_name, relation_filters}) do
+  # This is not finished. It will need a macro to join the relations on the query
+  def apply_relations_filter(query, module, {_relation_name, relation_filters}) do
     query
     |> where([], ^relation_filters)
   end
-
-  # def apply_filters(query, module, filters) when is_list(filters) do
-  #   Enum.reduce(filters, query, fn
-  #     {field, value}, acc when not is_nil(value) and value != "" ->
-  #       apply_filter({field, value}, acc)
-
-  #     _, acc ->
-  #       acc
-  #   end)
-  # end
-
-  # def apply_filter({field, value}, query) do
-  #   where(query, [__module__: m], m[^field] == ^value)
-  # end
 
   # utils
   @spec get_fields(atom) :: any
@@ -116,6 +88,25 @@ defmodule Trove do
     end)
   end
 
+  def create_base_query(module) do
+    from(
+      m in module,
+      as: :__module__
+    )
+  end
+
+  # make a macro for this
+  # def join_module(query, module, name, join_type \\ :left) do
+  #   join(
+  #     query,
+  #     join_type,
+  #     [__module__: m],
+  #     j in module
+  #     on:
+  #     # as: unquote(name)
+  #   )
+  # end
+
   def build_filter_map(module) do
     module
     |> get_field_map()
@@ -134,7 +125,7 @@ defmodule Trove do
     |> Kernel.++([{singular_association_key, fields}])
 
     # use this for infinite nested relations
-    # need to add cache of already visited relationships
+    # need to add cache of already visited relationships to avoid infinite loop
     # |> Kernel.++([
     #   {singular_association_key, get_available_filters(get_association(module, association_key))}
     # ])
@@ -163,6 +154,11 @@ defmodule Trove do
 
     find_valid_filters(fields, filters)
   end
+
+  # Filters
+  # These functions could probably be made into a macro
+  # That would possibly offer compile time warnings when
+  # invalid filters are being used
 
   # TODO find invalid filters to report to user
   def find_invalid_filters(fields, filters) do
@@ -193,25 +189,6 @@ defmodule Trove do
       end
     end)
   end
-
-  def create_base_query(module) do
-    from(
-      m in module,
-      as: :__module__
-    )
-  end
-
-  # make a macro for this
-  # def join_module(query, module, name, join_type \\ :left) do
-  #   join(
-  #     query,
-  #     join_type,
-  #     [__module__: m],
-  #     j in module
-  #     on:
-  #     # as: unquote(name)
-  #   )
-  # end
 
   def map_to_kv_list(map) when is_map(map) do
     Enum.map(map, fn {key, value} ->
@@ -245,13 +222,6 @@ defmodule Trove do
       |> to_string()
       |> Inflex.pluralize()
       |> String.to_atom()
-
-  # @spec build_associated_field_name(atom(), atom()) :: atom()
-  # def build_associated_field_name(association_key, field_name),
-  #   do:
-  #     association_key
-  #     |> get_singular_atom()
-  #     |> concat_atoms(field_name)
 
   def get_atom_suffix(atom) do
     atom

@@ -14,11 +14,12 @@ defmodule Trove.Helper do
 
   defp take_reduce_filtered({k, v}, acc, _nested_atom_list), do: Map.put(acc, k, v)
 
+  # TODO: This is not quite working. The goal was to drop any fields from
+  # the nested map that didn't exist in the nested list. ie the opposite of the above function `take_deep`
   def drop_deep(_map, nil), do: nil
 
   def drop_deep(map, nested_atom_list) do
     only_atom_list = get_only_atom_list(nested_atom_list)
-    IO.inspect(only_atom_list, label: 'only_atom_list', limit: :infinity)
 
     map
     |> Map.drop(only_atom_list)
