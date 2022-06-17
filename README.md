@@ -51,9 +51,9 @@ Run `mix test` to run tests.
 
 ## Reference
 
-https://yos.io/2016/04/28/writing-and-publishing-elixir-libraries/
-https://hexdocs.pm/ecto/Ecto.Schema.html#module-reflection
-https://hexdocs.pm/ecto_shorts/EctoShorts.html
+https://yos.io/2016/04/28/writing-and-publishing-elixir-libraries/  
+https://hexdocs.pm/ecto/Ecto.Schema.html#module-reflection  
+https://hexdocs.pm/ecto_shorts/EctoShorts.html  
 
 ## Notes
 
