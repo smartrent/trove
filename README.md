@@ -1,4 +1,4 @@
-# Trove
+# 💎 Trove
 
 > ⚠️ This package is still in development
 
