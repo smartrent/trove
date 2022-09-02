@@ -23,7 +23,7 @@ defmodule Trove do
       |> normalize_filters(module)
       # Transform filters to key value list
       # ie: [id: 1, message: "hello"]
-      |> map_to_kv_list()
+      |> Helper.map_to_kv_list()
 
     module
     |> create_base_query()
@@ -118,10 +118,10 @@ defmodule Trove do
   # ie [:vehicle_id, :vehicle_make, vehicle: [:id, :make]]
   def build_alternative_association_filters({association_key, module}) do
     fields = get_fields(module)
-    singular_association_key = get_singular_atom(association_key)
+    singular_association_key = Helper.get_singular_atom(association_key)
 
     fields
-    |> Enum.map(&concat_atoms(singular_association_key, &1))
+    |> Enum.map(&Helper.concat_atoms(singular_association_key, &1))
     |> Kernel.++([{singular_association_key, fields}])
 
     # use this for infinite nested relations
@@ -174,91 +174,20 @@ defmodule Trove do
     singular_association_keys =
       module
       |> get_associations()
-      |> Enum.map(&get_singular_atom/1)
+      |> Enum.map(&Helper.get_singular_atom/1)
 
     Enum.reduce(filters, %{}, fn {k, v}, acc ->
-      case atom_exclusively_contains(k, singular_association_keys) do
+      case Helper.atom_exclusively_contains(k, singular_association_keys) do
         false ->
           Map.put(acc, k, v)
 
         {:ok, parent_key} ->
           case Map.get(acc, parent_key) do
-            nil -> Map.put(acc, parent_key, Map.put(%{}, get_atom_suffix(k), v))
-            child -> Map.put(acc, parent_key, Map.put(child, get_atom_suffix(k), v))
+            nil -> Map.put(acc, parent_key, Map.put(%{}, Helper.get_atom_suffix(k), v))
+            child -> Map.put(acc, parent_key, Map.put(child, Helper.get_atom_suffix(k), v))
           end
       end
     end)
   end
 
-  def map_to_kv_list(map) when is_map(map) do
-    Enum.map(map, fn {key, value} ->
-      case key do
-        k when is_atom(k) -> {k, map_to_kv_list(value)}
-        k -> {String.to_existing_atom(k), map_to_kv_list(value)}
-      end
-    end)
-  end
-
-  def map_to_kv_list(value), do: value
-
-  # is it unsafe to take an existing atom and create a modified new one?
-  @spec concat_atoms(atom(), atom()) :: atom()
-  def concat_atoms(a1, a2) do
-    String.to_atom(to_string(a1) <> "_" <> to_string(a2))
-  end
-
-  @spec get_singular_atom(atom()) :: atom()
-  def get_singular_atom(a),
-    do:
-      a
-      |> to_string()
-      |> Inflex.singularize()
-      |> String.to_atom()
-
-  @spec get_plural_atom(atom()) :: atom()
-  def get_plural_atom(a),
-    do:
-      a
-      |> to_string()
-      |> Inflex.pluralize()
-      |> String.to_atom()
-
-  def get_atom_suffix(atom) do
-    atom
-    |> to_string()
-    |> String.split("_")
-    |> List.last()
-    |> String.to_atom()
-  end
-
-  def atom_matches(atom_a, list) when is_list(list),
-    do: Enum.any?(list, &atom_matches(atom_a, &1))
-
-  def atom_matches(atom_a, atom_b), do: atom_a == atom_b
-
-  # TODO please refactor to be more readable
-  def atom_exclusively_contains(atom_a, list) when is_list(list) do
-    case atom_contains(atom_a, list) do
-      false ->
-        false
-
-      {:ok, found_atom} ->
-        case found_atom != atom_a do
-          true -> {:ok, found_atom}
-          false -> false
-        end
-    end
-  end
-
-  def atom_contains(atom_a, list) when is_list(list) do
-    case Enum.find(list, &atom_contains(atom_a, &1)) do
-      nil -> false
-      found_atom -> {:ok, found_atom}
-    end
-  end
-
-  def atom_contains(atom_a, atom_b) when is_atom(atom_b),
-    do: String.contains?(to_string(atom_a), to_string(atom_b))
-
-  def atom_contains(atom, str), do: String.contains?(to_string(atom), str)
 end

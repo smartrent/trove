@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :trove, TroveTest.Repo,
   username: "db",

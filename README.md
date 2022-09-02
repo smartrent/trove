@@ -33,8 +33,6 @@ Log
 
 Run `docker-compose up -d` to start the database.
 
-Run `mix ecto.migrate` to apply the migrations to the database.
-
 Run `mix test` to run tests.
 
 ## Features
@@ -53,7 +51,7 @@ Run `mix test` to run tests.
 
 https://yos.io/2016/04/28/writing-and-publishing-elixir-libraries/  
 https://hexdocs.pm/ecto/Ecto.Schema.html#module-reflection  
-https://hexdocs.pm/ecto_shorts/EctoShorts.html  
+https://hexdocs.pm/ecto_shorts/EctoShorts.html
 
 ## Notes
 
@@ -68,7 +66,11 @@ Person
     first_name: %{ilike: "Scott"},
     vehicle: %{
       make: "Rivian"
-    }
+      year: %{gte: 2022}
+    },
+    page: 1,
+    limit: 10,
+    preloads: [vehicle: :parking_reservation]
   })
   |> Repo.all()
 ```
