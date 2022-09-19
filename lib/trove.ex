@@ -7,7 +7,6 @@ defmodule Trove do
 
   import Ecto.Query
 
-  alias Inflex
   alias Trove.Filter
   alias Trove.Helper
 

@@ -1,4 +1,6 @@
 defmodule Trove.Helper do
+  alias Inflex
+
   @spec map_to_kv_list(map() | any()) :: list()
   def map_to_kv_list(map) when is_map(map) do
     Enum.map(map, fn {key, value} ->
