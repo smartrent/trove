@@ -9,6 +9,8 @@ defmodule TroveTest.Repo.Migrations.CreateVehicle do
       add :color, :string
       add :license_plate, :string
       add :date_registered, :utc_datetime_usec
+
+      add :person_id, references(:person)
     end
   end
 end

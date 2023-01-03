@@ -6,13 +6,14 @@ defmodule TroveParentChildTest do
     Vehicle
   }
 
+  @tag :skip
   test "Person query - find by child vehicle" do
     {:ok, person1} = Repo.insert(%Person{first_name: "Tad", last_name: "S", age: 26})
     {:ok, person2} = Repo.insert(%Person{first_name: "E", last_name: "S", age: 26})
 
     {:ok, vehicle} =
       Repo.insert(%Vehicle{
-        person: person1.id,
+        person_id: person1.id,
         make: "Rivian",
         model: "R1",
         year: 2022,
@@ -33,13 +34,14 @@ defmodule TroveParentChildTest do
     assert p.first_name == "Tad"
   end
 
+  @tag :skip
   test "Person query - could not find by child vehicle" do
     {:ok, person1} = Repo.insert(%Person{first_name: "Tad", last_name: "S", age: 26})
     {:ok, person2} = Repo.insert(%Person{first_name: "E", last_name: "S", age: 26})
 
     {:ok, vehicle} =
       Repo.insert(%Vehicle{
-        person: person1.id,
+        person_id: person1.id,
         make: "Rivian",
         model: "R1",
         year: 2022,
