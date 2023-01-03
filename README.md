@@ -37,14 +37,34 @@ Run `mix test` to run tests.
 
 ## Features
 
+### 1.0
+
 - [x] Search by fields on schema
-- [ ] Search by relations fields
-  - [ ] Search one relation level deep
-  - [ ] Search infinite levels deep
+- [ ] Preload relationships
+- [ ] Sorting
 - [ ] Paginated results
-- [ ] Add custom filters to search
-- [ ] Docs
+
+### 1.x
+
+- [ ] Search with ilike, gte and other modifiers
+
+### 1.x
+
+- [ ] Search by relations fields
+- [ ] Search one relation level deep
+
+### 1.x
+
+- [ ] Search "infinite" levels deep
+
+### 1.x
+
+- [ ] HTTP params transform util function
+
+### 1.x
+
 - [ ] Schema information caching (ie Cache available_filters per module/schema)
+- [ ] ~Add custom filters to search~ can be added to the returned query
 - [ ] ^ OR filters validation built from macros
 
 ## Reference
@@ -87,8 +107,9 @@ Person
     page: 1,
     limit: 10,
     preloads: [vehicle: :parking_reservation]
+    sort: [first_name: :asc]
     allowed_fields: allowed_fields
-  })
+  )
   |> Repo.all()
 
 # Trove.search pattern
