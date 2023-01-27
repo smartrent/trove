@@ -7,31 +7,34 @@ defmodule Trove do
 
   import Ecto.Query
 
-  alias Trove.Filter
+  # alias Trove.Filter
   alias Trove.Helper
   alias Trove.Schema
 
-  @spec search(any(), list(), list(atom())) :: Query.t()
-  def search(module, filters \\ %{}, _preloads \\ []) do
+  @spec search(any(), list(atom())) :: Query.t()
+  def search(module, options) when is_list(options), do: search(module, %{}, options)
+
+  @spec search(any(), map(), list(atom())) :: Query.t()
+  def search(module, filters \\ %{}, options \\ []) do
     filter_list =
       module
       # Get all of the module's possible filters
       |> get_available_filters()
-      |> IO.inspect(label: "Available filters")
       # Validate and clean arg filters - remove any filter that does not match the module list (and type?)
       |> validate_filters(filters)
-      |> IO.inspect(label: "Valid filters")
       # Normalize filters to have consistent shape
       |> normalize_filters(module)
-      |> IO.inspect(label: "Normalized filters")
       # Transform filters to key value list
       # ie: [id: 1, message: "hello"]
       |> Helper.map_to_kv_list()
-      |> IO.inspect(label: "KV filters")
 
     module
     |> create_base_query()
     |> apply_filters(module, filter_list)
+
+    # |> apply_sort(options)
+    # |> apply_pagination(options)
+    # |> apply_preloads(options)
   end
 
   def get_available_filters(module) do
@@ -121,12 +124,13 @@ defmodule Trove do
 
   def apply_filters(query, %{}), do: query
 
-  def apply_filters(query, module, filter_list) when is_list(filter_list) do
-    relations = Enum.filter(filter_list, &is_tuple/1)
-    base_filters = Enum.filter(filter_list, &(is_tuple(&1)))
+  def apply_filters(query, _module, filter_list) when is_list(filter_list) do
+    # relations = Enum.filter(filter_list, &is_tuple/1)
+    base_filters = Enum.filter(filter_list, &is_tuple(&1))
 
     query
     |> where(^base_filters)
+
     # |> apply_relations_filters(module, relations)
   end
 

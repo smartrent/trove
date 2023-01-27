@@ -117,6 +117,7 @@ case Trove.search(
   Person,
   search_terms,
   allowed_fields,
+  pagination: %{page: 1, limit: 10}
   page: 1,
   limit: 10,
   preloads: [vehicle: :parking_reservation]
