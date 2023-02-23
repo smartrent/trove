@@ -33,6 +33,8 @@ Log
 
 Run `docker-compose up -d` to start the database.
 
+Run `mix deps.get` to install dependencies.
+
 Run `mix test` to run tests.
 
 ## Features
