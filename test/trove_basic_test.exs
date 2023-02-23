@@ -11,7 +11,7 @@ defmodule TroveBasicTest do
 
     result =
       Log
-      |> Trove.search()
+      |> Trove.search!()
       |> Repo.all()
 
     [l1 | _rest] = result
@@ -25,7 +25,7 @@ defmodule TroveBasicTest do
 
     result =
       Log
-      |> Trove.search(%{message: "Find me"})
+      |> Trove.search!(%{message: "Find me"})
       |> Repo.all()
 
     [r1] = result
@@ -38,7 +38,7 @@ defmodule TroveBasicTest do
 
     result =
       Log
-      |> Trove.search(%{other_field: "Find me"})
+      |> Trove.search!(%{other_field: "Find me"})
       |> Repo.all()
 
     assert Enum.count(result) == 2

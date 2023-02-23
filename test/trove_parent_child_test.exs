@@ -24,7 +24,7 @@ defmodule TroveParentChildTest do
 
     [p] =
       Person
-      |> Trove.search(%{
+      |> Trove.search!(%{
         vehicle: %{
           make: "Rivian"
         }
@@ -52,7 +52,7 @@ defmodule TroveParentChildTest do
 
     records =
       Person
-      |> Trove.search(%{
+      |> Trove.search!(%{
         vehicle: %{
           make: "Toyota"
         }

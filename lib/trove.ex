@@ -11,11 +11,11 @@ defmodule Trove do
   alias Trove.Helper
   alias Trove.Schema
 
-  @spec search(any(), list(atom())) :: Query.t()
-  def search(module, options) when is_list(options), do: search(module, %{}, options)
+  @spec search!(any(), list(atom())) :: Query.t()
+  def search!(module, options) when is_list(options), do: search!(module, %{}, options)
 
-  @spec search(any(), map(), list(atom())) :: Query.t()
-  def search(module, filters \\ %{}, options \\ []) do
+  @spec search!(any(), map(), list(atom())) :: Query.t()
+  def search!(module, filters \\ %{}, options \\ []) do
     filter_list =
       module
       # Get all of the module's possible filters
@@ -31,10 +31,10 @@ defmodule Trove do
     module
     |> create_base_query()
     |> apply_filters(module, filter_list)
+    |> apply_preloads(options)
 
     # |> apply_sort(options)
     # |> apply_pagination(options)
-    # |> apply_preloads(options)
   end
 
   def get_available_filters(module) do
@@ -132,6 +132,15 @@ defmodule Trove do
     |> where(^base_filters)
 
     # |> apply_relations_filters(module, relations)
+  end
+
+  def apply_preloads(query, options) do
+    Enum.reduce(options, query, fn option, acc ->
+      case option do
+        {:preloads, preloads} -> preload(acc, ^preloads)
+        _ -> acc
+      end
+    end)
   end
 
   # def apply_relations_filters(query, module, relations_list) do
