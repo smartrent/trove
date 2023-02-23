@@ -148,3 +148,9 @@ total_count = Person
   > Could be solved with a configurable limit
 - error handling -> bubbling errors up to user.
   > Trove should handle as much as possible
+
+### Contributing
+
+##### Test Fixtures
+
+https://drawsql.app/teams/tad-scritchfield/diagrams/trove

@@ -1,10 +1,11 @@
 defmodule Fixtures.Person do
   use Ecto.Schema
 
-  alias Fixtures.Vehicle
+  alias Fixtures.{Vehicle, Organization, OrganizationPerson}
 
-  schema "person" do
+  schema "people" do
     has_many(:vehicles, Vehicle)
+    many_to_many(:organizations, Organization, join_through: OrganizationPerson)
 
     field(:first_name, :string)
     field(:last_name, :string)
