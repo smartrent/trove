@@ -76,3 +76,5 @@ tflist
 *.iml
 
 .iex.local.exs
+
+TODO.txt
