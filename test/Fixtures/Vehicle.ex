@@ -4,7 +4,7 @@ defmodule Fixtures.Vehicle do
   alias Fixtures.{Person, ParkingSpot, VehicleParkingSpot}
 
   schema "vehicles" do
-    belongs_to(:people, Person)
+    belongs_to(:person, Person)
     many_to_many(:parking_spots, ParkingSpot, join_through: VehicleParkingSpot)
 
     field(:make, :string)

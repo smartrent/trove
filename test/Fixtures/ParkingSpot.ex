@@ -7,5 +7,6 @@ defmodule Fixtures.ParkingSpot do
     many_to_many(:vehicle, Vehicle, join_through: VehicleParkingSpot)
 
     field(:name, :string)
+    field(:location, :string)
   end
 end

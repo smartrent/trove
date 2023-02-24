@@ -3,7 +3,8 @@ defmodule TroveTest.Repo.Migrations.AddParkingSpot do
 
   def change do
     create table(:parking_spots) do
-      add :address, :string
+      add :name, :string
+      add :location, :string
     end
 
     create table(:vehicles_parking_spots) do

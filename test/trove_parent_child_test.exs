@@ -13,7 +13,7 @@ defmodule TroveParentChildTest do
 
     {:ok, vehicle} =
       Repo.insert(%Vehicle{
-        people_id: person1.id,
+        person_id: person1.id,
         make: "Rivian",
         model: "R1",
         year: 2022,
@@ -41,7 +41,7 @@ defmodule TroveParentChildTest do
 
     {:ok, vehicle} =
       Repo.insert(%Vehicle{
-        people_id: person1.id,
+        person_id: person1.id,
         make: "Rivian",
         model: "R1",
         year: 2022,
