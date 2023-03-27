@@ -2,7 +2,7 @@ defmodule TroveTest.Repo.Migrations.CreateVehicle do
   use Ecto.Migration
 
   def change do
-    create table(:vehicle) do
+    create table(:vehicles) do
       add :make, :string
       add :model, :string
       add :year, :integer
@@ -10,7 +10,7 @@ defmodule TroveTest.Repo.Migrations.CreateVehicle do
       add :license_plate, :string
       add :date_registered, :utc_datetime_usec
 
-      add :person_id, references(:person)
+      add :person_id, references(:people)
     end
   end
 end

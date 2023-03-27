@@ -2,7 +2,7 @@ defmodule TroveTest.Repo.Migrations.CreateLog do
   use Ecto.Migration
 
   def change do
-    create table(:log) do
+    create table(:logs) do
       add :message, :string
 
       timestamps()
