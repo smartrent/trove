@@ -31,10 +31,8 @@ defmodule Trove do
     module
     |> create_base_query()
     |> apply_filters(module, filter_list)
-    |> apply_preloads(options)
-
-    # |> apply_sort(options)
-    # |> apply_pagination(options)
+    # preloads, sort, pagination, etc
+    |> apply_options(options)
   end
 
   def get_available_filters(module) do
@@ -134,10 +132,13 @@ defmodule Trove do
     # |> apply_relations_filters(module, relations)
   end
 
-  def apply_preloads(query, options) do
+  def apply_options(query, options) do
     Enum.reduce(options, query, fn option, acc ->
       case option do
         {:preloads, preloads} -> preload(acc, ^preloads)
+        {:sort, sort} -> order_by(acc, ^sort)
+        # {:limit, limit} -> limit(acc, ^limit)
+        # {:offset, offset} -> offset(acc, ^offset)
         _ -> acc
       end
     end)
