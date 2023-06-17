@@ -42,8 +42,8 @@ Run `mix test` to run tests.
 ### 1.0
 
 - [x] Search by fields on schema
-- [ ] Preload relationships
-- [ ] Sorting
+- [x] Preload relationships
+- [x] Sorting
 - [ ] Paginated results
 
 ### 1.x
