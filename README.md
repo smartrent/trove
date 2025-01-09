@@ -69,6 +69,11 @@ Run `mix test` to run tests.
 - [ ] ~Add custom filters to search~ can be added to the returned query
 - [ ] ^ OR filters validation built from macros
 
+### 1.x (Performance & Tests)
+
+- [ ] Setup data once for all tests
+- [ ] In memory database?
+
 ## Reference
 
 https://yos.io/2016/04/28/writing-and-publishing-elixir-libraries/  

@@ -20,7 +20,9 @@ defmodule TroveSortTest do
           %Person{first_name: "Ben", last_name: "Ates", age: 24},
           %Person{first_name: "Travis", last_name: "Bates", age: 27},
           %Person{first_name: "Travis", last_name: "Cates", age: 29},
-          %Person{first_name: "Travis", last_name: "Dates", age: 30}
+          %Person{first_name: "Travis", last_name: "Dates", age: 30},
+          %Person{first_name: "Dalton", last_name: "AAA", age: 27},
+          %Person{first_name: "Dalton", last_name: "aAA", age: 29},
         ]
       })
 
@@ -65,6 +67,32 @@ defmodule TroveSortTest do
       [person1 | rest] = result
 
       assert person1.last_name == "Bates"
+    end
+
+    test "asc names with filter", %{org1: org1} do
+      result =
+        Person
+        |> Trove.search!(%{first_name: "Dalton"},
+          sort: [asc: :last_name]
+        )
+        |> Repo.all()
+
+        [p1, p2] = result
+
+        assert p1.last_name == "AAA"
+        assert p2.last_name == "aAA"
+
+      result2 =
+        Person
+        |> Trove.search!(%{first_name: "Dalton"},
+          sort: [desc: :last_name]
+        )
+        |> Repo.all()
+
+      [q1, q2] = result2
+
+      assert q1.last_name == "aAA"
+      assert q2.last_name == "AAA"
     end
   end
 end
