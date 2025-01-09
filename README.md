@@ -24,7 +24,7 @@ be found at [https://hexdocs.pm/trove](https://hexdocs.pm/trove).
 ## Example
 
 ```elixir
-Log
+  Log
   |> Trove.search(%{message: "Find me"})
   |> Repo.all()
 ```
@@ -43,12 +43,16 @@ Run `mix test` to run tests.
 
 - [x] Search by fields on schema
 - [x] Preload relationships
-- [x] Sorting
+- [x] Sorting (case sensitive)
 - [ ] Paginated results
 
 ### 1.x
 
 - [ ] Search with ilike, gte and other modifiers
+
+### 1.x
+
+- [ ] HTTP params transform util function
 
 ### 1.x
 
@@ -58,10 +62,6 @@ Run `mix test` to run tests.
 ### 1.x
 
 - [ ] Search "infinite" levels deep
-
-### 1.x
-
-- [ ] HTTP params transform util function
 
 ### 1.x
 
