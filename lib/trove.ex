@@ -11,6 +11,13 @@ defmodule Trove do
   alias Trove.Helper
   alias Trove.Schema
 
+  @paginition_default_limit 10
+
+  @doc """
+  Search for records in an Ecto Schema module with filters and options.
+
+
+  """
   @spec search!(any(), list(atom())) :: Query.t()
   def search!(module, options) when is_list(options), do: search!(module, %{}, options)
 
@@ -132,13 +139,29 @@ defmodule Trove do
     # |> apply_relations_filters(module, relations)
   end
 
+  @doc """
+  Apply query options to the search query.
+
+  Default limit is 10 // TODO: make this configurable
+
+  Page and offset cannot be used together. Please use one or the other.
+  """
+  @spec apply_options(Query.t(), list(atom())) :: Query.t()
   def apply_options(query, options) do
+    if (Keyword.has_key?(options, :page) && Keyword.has_key?(options, :offset)) do
+      raise ArgumentError, "Page and offset cannot be used together. Please use one or the other."
+    end
+
     Enum.reduce(options, query, fn option, acc ->
       case option do
         {:preloads, preloads} -> preload(acc, ^preloads)
         {:sort, sort} -> order_by(acc, ^sort)
-        # {:limit, limit} -> limit(acc, ^limit)
-        # {:offset, offset} -> offset(acc, ^offset)
+        {:limit, limit} -> limit(acc, ^limit)
+        {:offset, offset} -> offset(acc, ^offset)
+        {:page, page} ->
+          page_limit = Keyword.get(options, :limit, @paginition_default_limit)
+          IO.inspect(page_limit, label: "page_limit", limit: :infinity)
+          offset(acc, ^(page_limit * (page - 1))) |> limit(^page_limit)
         _ -> acc
       end
     end)

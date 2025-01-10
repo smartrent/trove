@@ -11,7 +11,7 @@ defmodule TroveTest.RepoCase do
     end
   end
 
-  setup tags do
+  setup_all tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(TroveTest.Repo)
 
     unless tags[:async] do

@@ -44,7 +44,7 @@ Run `mix test` to run tests.
 - [x] Search by fields on schema
 - [x] Preload relationships
 - [x] Sorting (case sensitive)
-- [ ] Paginated results
+- [x] Paginated results
 
 ### 1.x
 
@@ -62,6 +62,10 @@ Run `mix test` to run tests.
 ### 1.x
 
 - [ ] Search "infinite" levels deep
+
+### 1.x
+
+- [ ] Sort with transforms
 
 ### 1.x
 
