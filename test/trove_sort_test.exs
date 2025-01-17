@@ -1,5 +1,5 @@
 defmodule TroveSortTest do
-  """
+  @moduledoc """
   mix test test/trove_sort_test.exs
   """
 
@@ -7,12 +7,10 @@ defmodule TroveSortTest do
 
   alias Fixtures.{
     Organization,
-    Person,
-    Vehicle,
-    ParkingSpot
+    Person
   }
 
-  setup do
+  setup_all do
     {:ok, org1} =
       Repo.insert(%Organization{
         name: "Travis's Trucks",
@@ -30,7 +28,7 @@ defmodule TroveSortTest do
   end
 
   describe "Sort" do
-    test "asc ages", %{org1: org1} do
+    test "asc ages" do
       result =
         Person
         |> Trove.search!(%{},
@@ -38,12 +36,12 @@ defmodule TroveSortTest do
         )
         |> Repo.all()
 
-      [person1 | rest] = result
+      [person1 | _rest] = result
 
       assert person1.last_name == "Ates"
     end
 
-    test "desc ages", %{org1: org1} do
+    test "desc ages" do
       result =
         Person
         |> Trove.search!(%{},
@@ -51,12 +49,12 @@ defmodule TroveSortTest do
         )
         |> Repo.all()
 
-      [person1 | rest] = result
+      [person1 | _rest] = result
 
       assert person1.last_name == "Dates"
     end
 
-    test "asc ages with filter", %{org1: org1} do
+    test "asc ages with filter" do
       result =
         Person
         |> Trove.search!(%{first_name: "Travis"},
@@ -64,12 +62,12 @@ defmodule TroveSortTest do
         )
         |> Repo.all()
 
-      [person1 | rest] = result
+      [person1 | _rest] = result
 
       assert person1.last_name == "Bates"
     end
 
-    test "asc names with filter", %{org1: org1} do
+    test "asc names with filter" do
       result =
         Person
         |> Trove.search!(%{first_name: "Dalton"},

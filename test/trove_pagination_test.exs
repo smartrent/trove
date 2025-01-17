@@ -1,5 +1,5 @@
 defmodule TrovePagniationTest do
-  """
+  @moduledoc """
   mix test test/trove_pagination_test.exs
   """
 
